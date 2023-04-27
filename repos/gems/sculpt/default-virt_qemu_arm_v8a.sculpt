@@ -1,0 +1,27 @@
+# configuration decisions
+drivers: virt_qemu_arm_v8a 
+event_filter: virt_qemu_arm_v8a
+
+# supplemental depot content added to the system image
+import: pkg/drivers_interactive-virt_qemu_arm_v8a
+import: src/rom_reporter
+import: src/virt_qemu_drivers
+import: src/virtio_fb_drv
+import: src/virtio_input_drv
+import: src/event_filter
+import: src/virtdev_rom
+import: src/platform_drv
+import: src/virtio_nic_drv
+import: src/init 	
+import: src/nitpicker
+import: src/virtio_input_drv
+import: raw/drivers_interactive-virt_qemu_arm
+
+#import: bin/virtio_nic_drv
+
+
+# selection of launcher-menu entries
+launcher: shared_fs
+
+depot: genodelabs cnuke alex-ab mstein nfeske cproc chelmuth jschlatow
+depot: ssumpf skalk

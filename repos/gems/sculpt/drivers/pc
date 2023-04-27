@@ -1,18 +1,18 @@
 <config>
 
 	<parent-provides>
-		<service name="ROM"/>
 		<service name="IRQ"/>
 		<service name="IO_MEM"/>
 		<service name="IO_PORT"/>
+		<service name="ROM"/>
 		<service name="PD"/>
 		<service name="RM"/>
 		<service name="CPU"/>
 		<service name="LOG"/>
 		<service name="Timer"/>
-		<service name="Report"/>
 		<service name="Capture"/>
 		<service name="Event"/>
+		<service name="Report"/>
 	</parent-provides>
 
 	<report child_caps="true" child_ram="true" init_caps="true" init_ram="true" delay_ms="5000"/>

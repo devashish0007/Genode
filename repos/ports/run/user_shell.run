@@ -12,7 +12,14 @@ import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/vfs \
                   [depot_user]/src/vfs_pipe \
                   [depot_user]/src/nitpicker \
-                  [depot_user]/src/fs_rom
+                  [depot_user]/src/fs_rom\
+                  [depot_user]/pkg/jdk \
+                  [depot_user]/src/findutils \
+                  [depot_user]/src/grep \
+                  [depot_user]/src/pcre \
+                  [depot_user]/src/sed 
+                  
+
 
 # write default vimrc file
 set vimrc_fd [open [run_dir]/genode/vimrc w]
@@ -90,13 +97,46 @@ install_config {
 		<resource name="RAM" quantum="30M"/>
 		<provides><service name="File_system"/></provides>
 		<config>
+			<libc stdin="/dev/null" stdout="/dev/log" stderr="/dev/log" rtc="/dev/rtc" />
 			<vfs>
+
+				<dir name="dev">
+					<log/><null/><inline name="rtc">2000-01-01 00:00</inline>
+				</dir>
+				<dir name="bin">
+					<rom name="java" />
+					<rom name="hello" />
+				</dir>
+
+				<dir name="lib">
+					<rom name="java.lib.so" />
+					<inline name="jvm.cfg">-server KNOWN
+-client IGNORE
+</inline>
+					<dir name="server">
+						<rom name="jvm.lib.so" />
+					</dir>
+				</dir>
+				<dir name="modules">
+					<tar name="classes.tar" />
+				</dir>
+				
+				<!--
+				<tar name="hello.tar" />
+				<tar name="hello_arm.tar" />
+				-->
+				<rom name="jzip.lib.so" />
+				<rom name="nio.lib.so" />
+				<rom name="jnet.lib.so" />
+
+				
 				<tar name="coreutils.tar" />
 				<tar name="vim.tar" />
 				<tar name="bash.tar" />
-
+				
 
 				<dir name="home"> <ram/> </dir>
+				<dir name="java"> <tar name="hello.tar" /> </dir>
 				<dir name="share"> <dir name="vim"> <rom name="vimrc"/> </dir> </dir>
 				<dir name="tmp"> <ram/> </dir>
 				<dir name="dev">
@@ -140,6 +180,8 @@ install_config {
 			<any-service> <parent/> <any-child/> </any-service>
 		</route>
 	</start>
+
+
 </config>}
 
 set fd [open [run_dir]/genode/focus w]
@@ -148,6 +190,6 @@ close $fd
 
 build { lib/ld test/fork test/execve }
 
-build_boot_image { ld.lib.so libc.lib.so libm.lib.so vfs.lib.so posix.lib.so }
+build_boot_image { core init ld.lib.so timer libc.lib.so libm.lib.so vfs.lib.so posix.lib.so }
 
 run_genode_until forever

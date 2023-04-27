@@ -1,7 +1,7 @@
 _/raw/system_shell
 _/src/bash-minimal
 _/src/vim-minimal
-_/src/coreutils-minimal
+_/src/coreutils
 _/src/libc
 _/src/posix
 _/src/ncurses

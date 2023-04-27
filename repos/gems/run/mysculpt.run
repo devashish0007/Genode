@@ -18,7 +18,6 @@ proc assert_platform_supported { } {
 	if {[have_board linux]}       return
 	if {[have_board pinephone]}   return
 	if {[have_board virt_qemu_arm_v8a]}   return
-	if {[have_board virt_qemu_arm_v7a]}   return
 
 	puts "Platform is unsupported.";
 	exit 0;
@@ -152,37 +151,35 @@ proc log_route { } {
 }
 
 ############ commented by me ############################
-proc nic_drv { } {
-
-	if {[have_board pc]}          { return ipxe_nic_drv }
-	if {[have_board imx8q_evk]}   { return fec_nic_drv  }
-	if {[have_board mnt_reform2]} { return fec_nic_drv  }
-
-	# Added by me
-	if {[have_board virt_qemu_arm_v8a]} { return virtio_mmio_nic  }
-	if {[have_board virt_qemu_arm_v7a]} { return virtio_mmio_nic  }
-	#if {[have_board virt_qemu_arm_v8a]} { return virtio_nic_drv  }
-
-	return nic_unavailable
-}
+#proc nic_drv { } {
+#
+#	if {[have_board pc]}          { return ipxe_nic_drv }
+#	if {[have_board imx8q_evk]}   { return fec_nic_drv  }
+#	if {[have_board mnt_reform2]} { return fec_nic_drv  }
+#
+#	# Added by me
+#	if {[have_board virt_qemu_arm_v8a]} { return virtio_mmio_nic  }
+#
+#	return nic_unavailable
+#}
 ############ commented by me ############################
 
 
 proc log_core_start_node { } {
-#
-#	if {[have_board linux]} return
-#
-#	return {
-#	<start name="log_core">
-#		<resource name="RAM" quantum="1M"/>
-#		<config period_ms="2000"/>
-#		<route>
-#			<service name="ROM" label="log"> <parent label="core_log"/>       </service>
-#			<service name="Timer">           <child name="timer"/>            </service>
-#			<service name="LOG" label="log"> <child name="log" label="core"/> </service>
-#			<any-service> <parent/> </any-service>
-#		</route>
-#	</start>}
+
+	if {[have_board linux]} return
+
+	return {
+	<start name="log_core">
+		<resource name="RAM" quantum="1M"/>
+		<config period_ms="2000"/>
+		<route>
+			<service name="ROM" label="log"> <parent label="core_log"/>       </service>
+			<service name="Timer">           <child name="timer"/>            </service>
+			<service name="LOG" label="log"> <child name="log" label="core"/> </service>
+			<any-service> <parent/> </any-service>
+		</route>
+	</start>}
 }
 
 
@@ -576,7 +573,7 @@ install_config {
 
 	<start name="runtime" caps="50000" priority="-1">
 		<binary name="init"/>
-		<resource name="RAM" quantum="1G"/>
+		<resource name="RAM" quantum="32G"/>
 		<resource name="CPU" quantum="40"/>
 		<route>
 			<service name="ROM" label="config">

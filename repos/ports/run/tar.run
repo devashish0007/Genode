@@ -1,0 +1,45 @@
+set noux_pkgs "bash coreutils tar"
+
+ foreach pkg $noux_pkgs {
+   lappend_if [expr ![file exists bin/$pkg]] build_components noux-pkg/$pkg }
+
+ build $build_components
+
+ foreach pkg $noux_pkgs {
+    exec tar cfv bin/$pkg.tar -h -C bin/$pkg . }
+
+
+append config {
+  <config>
+  […]
+    <start name="ram_fs">
+      <resource name="RAM" quantum="32M"/>
+      <provides><service name="File_system"/></provides>
+      <config>
+       <content>
+         <dir name="tmp"> </dir>
+         <dir name="home"> </dir>
+       </content>
+       <policy label="noux -> root" root="/" />
+       <policy label="noux -> home" root="/home" writeable="yes" />
+       <policy label="noux -> tmp"  root="/tmp"  writeable="yes" />
+      </config>
+    </start>
+ […]
+
+ <start name="noux">
+     <resource name="RAM" quantum="256M" />
+     <config>
+       <fstab>}
+        foreach pkg $noux_pkgs {
+   append config {
+         <tar name=\"$pkg.tar\" />" }}
+         <dir name="home"> <fs label="home" /> </dir>
+         <dir name="ram"> <fs label="root" /> </dir>
+         <dir name="tmp"> <fs label="tmp" /> </dir>
+       </fstab>
+       <start name="/bin/bash">
+         <env name="TERM" value="linux" />
+       </start>
+     </config>
+   </start>}
