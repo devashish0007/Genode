@@ -3,9 +3,9 @@ drivers: virt_qemu_arm_v8a
 event_filter: virt_qemu_arm_v8a
 
 
-import: pkg/chroot
-import: pkg/wm
-import: pkg/window_layouter
+#import: pkg/chroot
+#import: pkg/wm
+#import: pkg/window_layouter
 
 
 
@@ -34,7 +34,7 @@ import: src/jdk
 
 
 # selection of launcher-menu entries
-launcher: shared_fs nano3d system_shell sticks_blue_backdrop user_shell
+#launcher: shared_fs nano3d system_shell sticks_blue_backdrop user_shell
 
 depot: genodelabs cnuke alex-ab mstein nfeske cproc chelmuth jschlatow
 depot: ssumpf skalk
